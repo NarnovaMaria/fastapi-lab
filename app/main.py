@@ -68,3 +68,22 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
     return db.query(Task).all()
 
 # Со следующей строки добавляйте эндпоинты для students
+
+
+@app.post("/create_narnova-m-a", status_code=201)
+def create_narnova_m_a(student: dict):
+    if any(s.get("name") == student.get("name") for s in STUDENTS):
+        raise HTTPException(status_code=400, detail="Студент уже существует")
+    
+    STUDENTS.append(student)
+    return {"message": "Студент добавлен", "data": student}
+
+
+@app.get("/get__narnova-m-a")
+def get_narnova_m_a():
+
+    for s in STUDENTS:
+        if s.get("name") == "narnova-m-a":
+            return {"data": s}
+            
+    raise HTTPException(status_code=404, detail="Студент не найден")
